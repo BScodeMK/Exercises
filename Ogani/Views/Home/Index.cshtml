@@ -1,9 +1,10 @@
-﻿@{
+﻿@model List<Ogani.Data.Entities.Category>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <!-- Hero Section Begin -->
-<partial name="_HeroSectionPartial" />
+@Html.Partial("_HeroSectionPartial", Model)
 <!-- Hero Section End -->
 
 <!-- Categories Section Begin -->
@@ -41,6 +42,7 @@
     </div>
 </section>
 <!-- Categories Section End -->
+
 <!-- Featured Section Begin -->
 <section class="featured spad">
     <div class="container">
@@ -55,13 +57,13 @@
                         <li data-filter=".oranges">Oranges</li>
                         <li data-filter=".fresh-meat">Fresh Meat</li>
                         <li data-filter=".vegetables">Vegetables</li>
-                        <li data-filter=".fastfood">Fastfood</li>
+                        <li data-filter=".fruits">Fruits</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="row featured__filter">
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fruits">
                 <div class="featured__item">
                     <div class="featured__item__pic set-bg" data-setbg="../img/featured/feature-1.jpg">
                         <ul class="featured__item__pic__hover">

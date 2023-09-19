@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Ogani.Data;
+using Ogani.Data.Entities;
 using Ogani.Models;
 using System.Diagnostics;
 
@@ -7,20 +9,24 @@ namespace Ogani.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
 		{
 			_logger = logger;
+            _context = context;
 		}
 
 		public IActionResult Index()
 		{
-			return View();
+            List<Category> categories = _context.Categories.ToList();
+            return View(categories);
 		}
 
         public IActionResult Shop()
         {
-            return View();
+            List<Category> categories = _context.Categories.ToList();
+            return View(categories);
         }
 
         public IActionResult Blog()

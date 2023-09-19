@@ -1,9 +1,10 @@
-﻿@{
+﻿@model List<Ogani.Data.Entities.Category>
+@{
     ViewData["Title"] = "Shop Page";
 }
 
 <!-- Hero Section Begin -->
-<partial name="_HeroSectionPartial" />
+@Html.Partial("_HeroSectionPartial", Model)
 <!-- Hero Section End -->
 
 <!-- Breadcrumb Section Begin -->
