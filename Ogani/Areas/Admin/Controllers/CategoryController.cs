@@ -97,5 +97,41 @@ namespace Ogani.Areas.Admin.Controllers
                
             }
         }
+
+        //GET Admin/Category/Update/D22763D0-DB93-4CE5-9F88-4B2E341B89D8
+        public IActionResult Update(Guid? id)
+        {
+            Category? category = _context.Categories.FirstOrDefault(c => c.CategoryID == id);
+            if (category == null)
+                return RedirectToAction("Categories", "Console");
+            else
+                return View(category);
+        }
+
+        //POST Admin/Category/Update
+        [HttpPost]
+        public IActionResult Update([Bind("CategoryID,CategoryName,CategoryDescription")]Category updatedCategory)
+        {
+            Category? category = _context.Categories.FirstOrDefault(c => c.CategoryID == updatedCategory.CategoryID);
+            if (category == null)
+                return RedirectToAction("Categories", "Console");
+            else
+            {
+                try
+                {
+                    category.CategoryName = updatedCategory.CategoryName;
+                    category.CategoryDescription = updatedCategory.CategoryDescription;
+
+                    _context.Categories.Update(category);
+                    _context.SaveChanges();
+                    return RedirectToAction("Categories", "Console");
+                }
+                catch (Exception ex)
+                {
+                    throw new HttpRequestException("Category not found", ex.InnerException);
+                }
+
+            }
+        }
     }
 }
