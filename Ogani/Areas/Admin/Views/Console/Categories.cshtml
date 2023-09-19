@@ -1,0 +1,56 @@
+﻿@using Ogani.Data.Entities;
+
+@model List<Category>
+@{
+}
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Tables</h1>
+<p class="mb-4">
+    DataTables is a third party plugin that is used to generate the demo table below.
+    For more information about DataTables, please visit the <a target="_blank"
+                                                               href="https://datatables.net">official DataTables documentation</a>.
+</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All categories</h6>
+    </div>
+    <a asp-controller="Category" asp-action="Create" class="btn btn-info">Create category</a>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Descriptio</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Descriptio</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (Category category in Model)
+                    {
+                        <tr>
+                            <td>@category.CategoryName</td>
+                            <td>@category.CategoryDescription</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Category" asp-action="Details" asp-route-id="@category.CategoryID" class="btn btn-info">Detais</a>
+                                    <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryID" class="btn btn-danger">X</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
