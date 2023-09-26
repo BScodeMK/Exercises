@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Ogani.Data;
 using Ogani.Data.Entities;
 using Ogani.Models;
@@ -20,13 +21,21 @@ namespace Ogani.Controllers
 		public IActionResult Index()
 		{
             List<Category> categories = _context.Categories.ToList();
-            return View(categories);
+            List<Product> products = _context.Products.Include(p => p.ProductCategory).ToList();
+
+            ShopViewModel model = new ShopViewModel(categories,products);
+
+            return View(model);
 		}
 
         public IActionResult Shop()
         {
             List<Category> categories = _context.Categories.ToList();
-            return View(categories);
+            List<Product> products = _context.Products.Include(p => p.ProductCategory).ToList();
+
+            ShopViewModel model = new ShopViewModel(categories, products);
+
+            return View(model);
         }
 
         public IActionResult Blog()

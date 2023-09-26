@@ -27,7 +27,7 @@ namespace Ogani.Data.Entities
 
         public double ProductWeight { get; set; }
 
-        [StringLength(20)]
+        [StringLength(50)]
         public string? ProductImageName { get; set; }
 
         [DataType(DataType.Date)]
@@ -35,6 +35,9 @@ namespace Ogani.Data.Entities
 
         [DataType(DataType.Date)]
         public DateTime DateOfEdit { get; set; }
+
+        [Required(ErrorMessage = "You must select a product category!")]
+        public Guid ProductCategoryCategoryID { get; set; }
 
         public virtual Category? ProductCategory { get; set; }
     }

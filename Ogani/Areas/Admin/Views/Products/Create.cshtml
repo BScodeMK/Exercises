@@ -1,4 +1,5 @@
-﻿@model Ogani.Data.Entities.Product
+﻿@using Ogani.Data.Entities;
+@model Ogani.Data.Entities.Product
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductName" class="control-label"></label>
@@ -43,9 +44,23 @@
                 <span asp-validation-for="ProductWeight" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductImageName" class="control-label"></label>
-                <input asp-for="ProductImageName" class="form-control" />
+                <label for="image" class="control-label">ProductImage</label>
+                <div class="custom-file">
+                    <input name="image" id="image" type="file" class="custom-file-input" onchange="updateFileNameLabel(this)" />
+                    <label class="custom-file-label" id="imageLabel" for="image">Choose file</label>
+                </div>
                 <span asp-validation-for="ProductImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductCategoryCategoryID" class="control-label">ProductCategory</label>
+                <select asp-for="ProductCategoryCategoryID" class="form-control">
+                    <option value="@Guid.Empty">Select Category...</option>
+                    @foreach (Category category in ViewBag.Categories)
+                    {
+                        <option value="@category.CategoryID">@category.CategoryName</option>
+                    }
+                </select>
+                <span asp-validation-for="ProductCategoryCategoryID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -57,4 +72,11 @@
 <div>
     <a asp-controller="Console" asp-action="Products">Back to List</a>
 </div>
+
+<script>
+    function updateFileNameLabel(input) {
+        var fileName = input.files[0].name;
+        document.getElementById("imageLabel").innerText = fileName;
+    }
+</script>
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ogani.Data;
 using Ogani.Data.Entities;
@@ -14,10 +9,12 @@ namespace Ogani.Areas.Admin.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
 
@@ -41,6 +38,7 @@ namespace Ogani.Areas.Admin.Controllers
         // GET: Admin/Products/Create
         public IActionResult Create()
         {
+            ViewBag.Categories = _context.Categories;
             return View();
         }
 
@@ -49,16 +47,42 @@ namespace Ogani.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,ProductName,ProductPrice,ProductShortDescription,ProductDescription,ProductInformation,ProductWeight,ProductImageName")] Product product)
+        public async Task<IActionResult> Create(Product product, IFormFile image)
         {
-            if (ModelState.IsValid)
+            Guid productID = Guid.NewGuid();
+
+            if (image != null)
             {
-                product.ProductID = Guid.NewGuid();
+                string imageName = productID + Path.GetExtension(image.FileName);
+                string imagePath = Path.Combine(_hostingEnvironment.WebRootPath,
+                                                "img",
+                                                "product",
+                                                imageName);
+                using (Stream fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+                product.ProductImageName = imageName;
+            }
+            else
+            {
+                ModelState.AddModelError("ProductImageName", "You must insert an Image!");
+                return View(product);
+            }
+
+
+            ViewBag.Categories = _context.Categories;
+
+            if (ModelState.IsValid && product.ProductCategoryCategoryID != Guid.Empty)
+            {
+                product.ProductID = productID;
                 product.DateOfCreation = DateTime.Now;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Products","Console");
+                return RedirectToAction("Products", "Console");
             }
+
+            ModelState.AddModelError("ProductCategoryCategoryID", "You must select a product category!");
             return View(product);
         }
 
